@@ -1,0 +1,43 @@
+# Large Raw Dataset (1.08 GB NOAA/ASOS dataset excluded from Git)
+WeatherEvents_Jan2016-Dec2022.csv
+*.csv.zip
+*.zip
+*.tar.gz
+*.rar
+
+# Python bytecode & cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Virtual Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDE & Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+*.sublime-workspace
+*.sublime-project
+
+# OS temporary files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Temporary and test artifacts
+*.tmp
+*.log
+.antigravity*

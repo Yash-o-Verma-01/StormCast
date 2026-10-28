@@ -1,0 +1,153 @@
+{
+  "storm_occurrence": {
+    "best_model": "Random Forest",
+    "models": {
+      "Logistic Regression": {
+        "accuracy": 0.7769,
+        "precision_macro": 0.7688,
+        "recall_macro": 0.776,
+        "f1_macro": 0.771,
+        "precision_storm": 0.7007,
+        "recall_storm": 0.7719,
+        "f1_storm": 0.7346,
+        "roc_auc": 0.8358,
+        "brier_score": 0.1626
+      },
+      "Decision Tree": {
+        "accuracy": 0.8286,
+        "precision_macro": 0.8209,
+        "recall_macro": 0.8282,
+        "f1_macro": 0.8236,
+        "precision_storm": 0.7641,
+        "recall_storm": 0.8266,
+        "f1_storm": 0.7941,
+        "roc_auc": 0.897,
+        "brier_score": 0.126
+      },
+      "Random Forest": {
+        "accuracy": 0.8373,
+        "precision_macro": 0.8297,
+        "recall_macro": 0.8343,
+        "f1_macro": 0.8317,
+        "precision_storm": 0.7835,
+        "recall_storm": 0.8196,
+        "f1_storm": 0.8011,
+        "roc_auc": 0.9109,
+        "brier_score": 0.12
+      }
+    },
+    "features": {
+      "numeric": [
+        "latitude",
+        "longitude",
+        "month",
+        "day",
+        "hour"
+      ],
+      "categorical": [
+        "timezone",
+        "season",
+        "state"
+      ]
+    }
+  },
+  "weather_severity": {
+    "best_model": "Random Forest",
+    "models": {
+      "Logistic Regression": {
+        "accuracy": 0.6521,
+        "macro_f1": 0.5464,
+        "weighted_f1": 0.6592,
+        "classification_report": {
+          "Heavy": {
+            "precision": 0.34022257551669316,
+            "recall": 0.7157190635451505,
+            "f1-score": 0.46120689655172414,
+            "support": 299.0
+          },
+          "Light": {
+            "precision": 0.5843365859840325,
+            "recall": 0.641664347342054,
+            "f1-score": 0.6116601445910991,
+            "support": 7186.0
+          },
+          "Moderate": {
+            "precision": 0.3415210203117619,
+            "recall": 0.3807266982622433,
+            "f1-score": 0.3600597609561753,
+            "support": 1899.0
+          },
+          "Severe": {
+            "precision": 0.8042763157894737,
+            "recall": 0.7071242649185385,
+            "f1-score": 0.752577848458421,
+            "support": 10373.0
+          },
+          "accuracy": 0.6520726830996609,
+          "macro avg": {
+            "precision": 0.5175891244004902,
+            "recall": 0.6113085935169966,
+            "f1-score": 0.5463761626393548,
+            "support": 19757.0
+          },
+          "weighted avg": {
+            "precision": 0.6727780481964364,
+            "recall": 0.6520726830996609,
+            "f1-score": 0.6591858161267187,
+            "support": 19757.0
+          }
+        }
+      },
+      "Random Forest": {
+        "accuracy": 0.682,
+        "macro_f1": 0.5892,
+        "weighted_f1": 0.6906,
+        "classification_report": {
+          "Heavy": {
+            "precision": 0.3557692307692308,
+            "recall": 0.8662207357859532,
+            "f1-score": 0.5043816942551119,
+            "support": 299.0
+          },
+          "Light": {
+            "precision": 0.6049876485119398,
+            "recall": 0.7156971889785695,
+            "f1-score": 0.6557021737744629,
+            "support": 7186.0
+          },
+          "Moderate": {
+            "precision": 0.4055451127819549,
+            "recall": 0.454449710373881,
+            "f1-score": 0.4286069034020363,
+            "support": 1899.0
+          },
+          "Severe": {
+            "precision": 0.8583333333333333,
+            "recall": 0.6950737491564639,
+            "f1-score": 0.7681244340275928,
+            "support": 10373.0
+          },
+          "accuracy": 0.6820367464696057,
+          "macro avg": {
+            "precision": 0.5561588313491147,
+            "recall": 0.6828603460737168,
+            "f1-score": 0.589203801364801,
+            "support": 19757.0
+          },
+          "weighted avg": {
+            "precision": 0.7150598814620842,
+            "recall": 0.6820367464696057,
+            "f1-score": 0.6906091618694263,
+            "support": 19757.0
+          }
+        }
+      }
+    },
+    "classes": [
+      "Light",
+      "Moderate",
+      "Heavy",
+      "Severe"
+    ]
+  }
+}

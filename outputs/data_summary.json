@@ -1,0 +1,61 @@
+{
+  "raw_dataset_total_rows": 8627181,
+  "raw_event_type_distribution": {
+    "Rain": 5000794,
+    "Fog": 2014190,
+    "Snow": 1158575,
+    "Cold": 232192,
+    "Precipitation": 157186,
+    "Storm": 61317,
+    "Hail": 2927
+  },
+  "cleaned_dataset_rows": 100000,
+  "storm_events_count": 40000,
+  "non_storm_events_count": 60000,
+  "event_type_distribution": {
+    "Storm": 40000,
+    "Rain": 34886,
+    "Fog": 14278,
+    "Snow": 7919,
+    "Cold": 1702,
+    "Precipitation": 1192,
+    "Hail": 23
+  },
+  "storm_severity_distribution": {
+    "Severe": 40000
+  },
+  "all_severity_distribution": {
+    "Severe": 51866,
+    "Light": 35931,
+    "Moderate": 9496,
+    "Heavy": 1492,
+    "UNK": 1192,
+    "Other": 23
+  },
+  "numeric_features": [
+    "precipitation_in",
+    "latitude",
+    "longitude",
+    "month",
+    "day",
+    "hour"
+  ],
+  "categorical_features": [
+    "timezone",
+    "season",
+    "state"
+  ],
+  "precipitation_stats": {
+    "mean": 0.054487600000000004,
+    "std": 0.4007487285590241,
+    "median": 0.0,
+    "max": 20.0
+  },
+  "states_count": 48,
+  "seasons_distribution": {
+    "Winter": 31370,
+    "Spring": 28798,
+    "Fall": 21072,
+    "Summer": 18760
+  }
+}
