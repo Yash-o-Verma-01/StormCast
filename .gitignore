@@ -14,8 +14,11 @@ __pycache__/
 .coverage
 htmlcov/
 
-# Virtual Environments
+# Virtual Environments & Secrets
 .env
+*.env
+.streamlit/secrets.toml
+secrets.toml
 .venv
 env/
 venv/
