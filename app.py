@@ -5,6 +5,8 @@ Streamlit Application for Live Meteorological Inference.
 
 import os
 import sys
+from typing import Dict, Any, Optional
+
 import joblib
 import pandas as pd
 import streamlit as st
@@ -125,6 +127,19 @@ def load_models():
     return models
 
 
+@st.cache_data(ttl=300, show_spinner=False)
+def get_cached_weather(city_name: str) -> Dict[str, Any]:
+    """
+    Cached weather fetcher with a 5-minute TTL.
+    Avoids duplicate calls when Streamlit reruns or for repeated identical inputs.
+    Does NOT cache failed responses.
+    """
+    res = fetch_live_weather(city_name)
+    if not res.get('success'):
+        raise RuntimeError(res.get('error', 'Weather service temporarily unavailable.'))
+    return res
+
+
 def determine_risk_tier(prob: float) -> str:
     """Categorize probability into standard risk level."""
     if prob >= 0.65:
@@ -164,46 +179,68 @@ def main():
     if 'prediction_done' not in st.session_state:
         st.session_state.prediction_done = False
     if 'last_location' not in st.session_state:
-        st.session_state.last_location = ""
+        st.session_state.last_location = "Dallas, TX"
     if 'pred_results' not in st.session_state:
         st.session_state.pred_results = None
+    if 'location_query' not in st.session_state:
+        st.session_state.location_query = "Dallas, TX"
 
     # Location Input Section
     st.markdown("### 📍 Location")
+
+    # Quick test location buttons
+    st.write("**Quick Location Presets:**")
+    qc1, qc2, qc3, qc4, qc5 = st.columns(5)
+    with qc1:
+        if st.button("📍 Dallas, TX", use_container_width=True):
+            st.session_state.location_query = "Dallas, TX"
+    with qc2:
+        if st.button("📍 Denver, CO", use_container_width=True):
+            st.session_state.location_query = "Denver, CO"
+    with qc3:
+        if st.button("📍 Miami, FL", use_container_width=True):
+            st.session_state.location_query = "Miami, FL"
+    with qc4:
+        if st.button("📍 Seattle, WA", use_container_width=True):
+            st.session_state.location_query = "Seattle, WA"
+    with qc5:
+        if st.button("📍 Austin, TX", use_container_width=True):
+            st.session_state.location_query = "Austin, TX"
 
     loc_col1, loc_col2 = st.columns([3, 1])
     with loc_col1:
         city_input = st.text_input(
             "Enter City / Location",
-            value=st.session_state.last_location if st.session_state.last_location else "Austin, Texas",
-            placeholder="e.g. Austin, Dallas, Denver, Miami, Seattle, Delhi",
+            value=st.session_state.location_query,
+            placeholder="e.g. Dallas, Denver, Miami, Seattle, Austin, Delhi",
             label_visibility="collapsed"
         )
     with loc_col2:
-        fetch_clicked = st.button("📍 Get Weather", use_container_width=True)
+        fetch_clicked = st.button("📍 Get Weather", use_container_width=True, type="secondary")
 
-    # Location suggestions for quick demonstration
-    st.caption("Quick test locations: "
-               "[**Dallas**](javascript:void(0)) | "
-               "[**Denver**](javascript:void(0)) | "
-               "[**Miami**](javascript:void(0)) | "
-               "[**Seattle**](javascript:void(0))")
-
-    # API Fetch Action
+    # API Fetch Action - Only executes when explicitly requested
     if fetch_clicked:
-        if not city_input.strip():
+        query = city_input.strip()
+        if not query:
             st.warning("Please enter a location name before fetching weather.")
         else:
-            with st.spinner(f"Retrieving current weather for '{city_input}'..."):
-                res = fetch_live_weather(city_input.strip())
-                if res.get('success'):
+            st.session_state.location_query = query
+            with st.spinner(f"Retrieving current weather for '{query}'..."):
+                try:
+                    res = get_cached_weather(query)
                     st.session_state.weather_data = res
-                    st.session_state.last_location = city_input.strip()
+                    st.session_state.last_location = query
                     st.session_state.prediction_done = False
                     st.session_state.pred_results = None
-                else:
-                    st.session_state.weather_data = None
-                    st.error(f"❌ {res.get('error', 'Unable to retrieve live weather data.')}")
+                except RuntimeError as e:
+                    err_msg = str(e)
+                    if "rate-limited" in err_msg or "429" in err_msg:
+                        st.warning(
+                            f"⚠️ Weather service temporarily rate-limited. "
+                            f"Displaying previously retrieved weather data if available, or use Manual Prediction Mode below."
+                        )
+                    else:
+                        st.error(f"❌ {err_msg}")
 
     # Display Weather Summary Card if available
     w = st.session_state.weather_data
@@ -233,7 +270,8 @@ def main():
         with m4:
             st.metric("Wind Speed", f"{w['wind_kmh']} km/h")
 
-        st.caption(f"Data source: {w.get('provider', 'Live Meteorological API')} "
+        cache_note = " (cached)" if w.get('from_cache') else ""
+        st.caption(f"Data source: {w.get('provider', 'Live Meteorological Service')}{cache_note} "
                    f"(Coordinates: {w['latitude']:.2f}°N, {w['longitude']:.2f}°W)")
 
         # Prediction Trigger Button
@@ -328,7 +366,7 @@ def main():
                         with p_cols[idx]:
                             st.metric(label=c, value=f"{sev_probs[c]}%")
 
-    # Manual Fallback Mode (Section 12 of Requirements)
+    # Manual Fallback Mode (Always available)
     st.markdown("---")
     with st.expander("⚙️ Manual Prediction Mode (Fallback / Offline)"):
         st.markdown(
