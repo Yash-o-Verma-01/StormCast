@@ -114,6 +114,6 @@ The application will open in your default browser at `http://localhost:8501`.
 ---
 
 ## 👤 Author
-
+**Tanvi**
 **Yash Verma**  
 Bennett University
